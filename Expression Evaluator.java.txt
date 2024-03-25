@@ -1,0 +1,111 @@
+import java.util.*;
+
+public class ExpressionEvaluator {
+
+    public static void main(String[] args) {
+
+        String arithmeticInput1 = "3 + 4 * 2";
+        String arithmeticInput2 = "(3 + 4) * 2";
+        String arithmeticInput3 = "10 / 2 - 1";
+        String arithmeticInput4 = "(10 - (2 + 4)) * 2";
+
+
+        System.out.println("*** The first input is ***"+"\n");
+        checkingFormat(arithmeticInput1);
+        System.out.println("And the value of the first input of " + arithmeticInput1 + " = " + getExpressionValue(arithmeticInput1) + "\n");
+
+        System.out.println("*** The second input is ***"+"\n");
+        checkingFormat(arithmeticInput2);
+        System.out.println("And the value of the first input of " + arithmeticInput2 + " = " + getExpressionValue(arithmeticInput2) + "\n");
+
+        System.out.println("*** The third input is ***"+"\n");
+        checkingFormat(arithmeticInput3);
+        System.out.println("And the value of the first input of " + arithmeticInput3 + " = " + getExpressionValue(arithmeticInput3) + "\n");
+
+        System.out.println("*** The fourth input is ***"+"\n");
+        checkingFormat(arithmeticInput4);
+        System.out.println("And the value of the first input of " + arithmeticInput4 + " = " + getExpressionValue(arithmeticInput4) + "\n");
+
+    }
+
+    public static void checkingFormat(String inputs) {
+        String arithmeticExpressionsChecker = "[-+]?\\d+(\\.\\d+)?(\\s*[*/+-]\\s*[-+]?\\d+(\\.\\d+)?)*";
+
+        if (inputs.matches(arithmeticExpressionsChecker)) {
+            System.out.println("The input format is valid\n");
+        } else {
+            System.out.println("The input format is not valid\n");
+        }
+    }
+
+    public static int getExpressionValue(String arithmeticExpressionInput) {
+        // Create a stack to store operands
+        Stack<Integer> operands = new Stack<>();
+
+        // Create a stack to store operators
+        Stack<Character> operators = new Stack<>();
+
+        // Iterate through the expression
+        for (int i = 0; i < arithmeticExpressionInput.length(); i++) {
+            char c = arithmeticExpressionInput.charAt(i);
+            if (Character.isDigit(c)) {
+                // If the character is a digit, parse the number and push it onto the operands stack
+                int num = 0;
+                while (i < arithmeticExpressionInput.length() && Character.isDigit(arithmeticExpressionInput.charAt(i))) {
+                    num = num * 10 + (arithmeticExpressionInput.charAt(i) - '0');
+                    i++;
+                }
+                i--; // Move back one position to correctly handle next character in the loop
+                operands.push(num);
+            } else if (c == '(') {
+                // If the character is an opening parenthesis, push it onto the operators stack
+                operators.push(c);
+            } else if (c == ')') {
+                // If the character is a closing parenthesis, evaluate the expression until the corresponding opening parenthesis is found
+                while (operators.peek() != '(') {
+                    operands.push(applyOperation(operators.pop(), operands.pop(), operands.pop()));
+                }
+                operators.pop(); // Discard the opening parenthesis
+            } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+                // If the character is an operator, evaluate any operators with higher or equal precedence before pushing it onto the operators stack
+                while (!operators.isEmpty() && precedence(c) <= precedence(operators.peek())) {
+                    operands.push(applyOperation(operators.pop(), operands.pop(), operands.pop()));
+                }
+                operators.push(c);
+            }
+        }
+
+        // Evaluate any remaining operators
+        while (!operators.isEmpty()) {
+            operands.push(applyOperation(operators.pop(), operands.pop(), operands.pop()));
+        }
+
+        // The top of the operands stack contains the final result
+        return operands.pop();
+    }
+
+    public static int precedence(char op) {
+        // Define operator precedence
+        if (op == '+' || op == '-')
+            return 1;
+        if (op == '*' || op == '/')
+            return 2;
+        return 0;
+    }
+
+    public static int applyOperation(char op, int b, int a) {
+        // Apply the given operator to operands a and b
+        switch (op) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+            case '/':
+                if (b == 0) throw new UnsupportedOperationException("Cannot divide by zero");
+                return a / b;
+        }
+        return 0;
+    }
+}
