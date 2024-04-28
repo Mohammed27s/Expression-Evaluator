@@ -4,15 +4,44 @@ public class ExpressionEvaluator {
 
     public static void main(String[] args) {
 
-        String arithmeticInput1 = "3 + 4 * 2";
-        String arithmeticInput2 = "(3 + 4) * 2";
-        String arithmeticInput3 = "10 / 2 - 1";
-        String arithmeticInput4 = "(10 - (2 + 4)) * 2";
+        Scanner in = new Scanner(System.in);
+
+        String arithmeticInput1; //= "3 + 4 * 2";
+        String arithmeticInput2; //= "(3 + 4) * 2";
+        String arithmeticInput3; //= "10 / 2 - 1";
+        String arithmeticInput4; //= "(10 - (2 + 4)) * 2";
+
+        System.out.println("\n");
+
+        System.out.println(" ****** HINT: (Before you enter your arithmetic operation"+"\n"
+                +" make sure there is a space like this format: (3 + 4 * 2) ****** "+"\n");
+
+        System.out.println("Enter your first arithmetic operation: ");
+        arithmeticInput1 = in.nextLine();
+
+        System.out.println("======================================================================");
+
+        System.out.println("Enter your second arithmetic operation:");
+        arithmeticInput2 = in.nextLine();
+
+        System.out.println("======================================================================");
+
+        System.out.println("Enter your third arithmetic operation: ");
+        arithmeticInput3 = in.nextLine();
+
+        System.out.println("======================================================================");
+
+        System.out.println("Enter your fourth arithmetic operation: ");
+        arithmeticInput4 = in.nextLine();
+
+        System.out.println("======================================================================");
+
+
 
 
         System.out.println("*** The first input is ***"+"\n");
         checkingFormat(arithmeticInput1);
-        System.out.println("And the value of the first input of " + arithmeticInput1 + " = " + getExpressionValue(arithmeticInput1) + "\n");
+        System.out.println("And the value of  the first input of " + arithmeticInput1 + " = " + getExpressionValue(arithmeticInput1) + "\n");
 
         System.out.println("*** The second input is ***"+"\n");
         checkingFormat(arithmeticInput2);
